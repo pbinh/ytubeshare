@@ -1,0 +1,32 @@
+version: '3'
+services:
+  # Database service
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: YtubeSh@re
+      MYSQL_DATABASE: YtubeSh@re
+
+  # Rails API service
+  api:
+    build:
+      context: ./ytubeshare-be
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: mysql2://root:YtubeSh@re@db/ytubeshare
+    volumes:
+      - ./ytubeshare-be:/app
+
+  # ReactJS service
+  react:
+    build:
+      context: ./ytubeshare-fe
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./ytubeshare-fe:/app
