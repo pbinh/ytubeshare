@@ -15,9 +15,33 @@ import { GlobalStyle } from 'styles/global-styles';
 import { HomePage } from './pages/HomePage/Loadable';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
+import { createConsumer, Channel } from "@rails/actioncable";
+
 
 export function App() {
   const { i18n } = useTranslation();
+
+  React.useEffect(() => {
+    const consumer = createConsumer("ws://127.0.0.1:3000/cable");
+    console.log("Done handshake")
+    const channel : Channel = consumer.subscriptions.create("NotificationsChannel", {
+      connected() {
+        console.log("Connected to MyChannel");
+      },
+      received(data: any) {
+        console.log("Received message:", data.message);
+        
+      },
+      disconnected() {
+        console.log("Disconnected from MyChannel");
+      },
+    });
+
+    return () => {
+      consumer.subscriptions.remove(channel)
+    };
+  }, []);
+  
   return (
     <BrowserRouter>
       <Helmet

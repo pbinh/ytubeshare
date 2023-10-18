@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@rails/actioncable": "7.1.1",
     "@reduxjs/toolkit": "1.8.5",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
@@ -60,7 +61,8 @@
     "stylelint-processor-styled-components": "1.10.0",
     "ts-node": "10.9.1",
     "typescript": "4.6.4",
-    "web-vitals": "2.1.4"
+    "web-vitals": "2.1.4",
+    "websocket": "1.0.34"
   },
   "scripts": {
     "start": "react-scripts start",
