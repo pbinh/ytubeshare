@@ -12,7 +12,7 @@ export const LoginedNav = ({email, onShareBtnClicked, onLogoutBtnClicked}) => {
         <p style={{color: 'white'}}>{email}</p>
       </Col>
       <Col span={6}>
-        <Button onClick={() => onShareBtnClicked()} style={style} type="primary">YShare</Button>
+        <Button onClick={() => onShareBtnClicked()} style={{...style, fontWeight: 800}} type="primary">Share</Button>
       </Col>
       <Col span={6}>
         <Button onClick={() => onLogoutBtnClicked()} style={style} type="primary">Logout</Button>

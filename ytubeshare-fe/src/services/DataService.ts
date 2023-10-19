@@ -8,7 +8,27 @@ const API_LIST = {
   REGISTER: `${root}/api/register`,
 };
 
+const LOCAL_STORAGE_KEY_USERDATA = 'LOCAL_STORAGE_KEY_USERDATA'
+
 export const ServiceProvider = {
+  LocalStorageService: {
+    persistUserData: (userData) => {
+      localStorage.setItem(LOCAL_STORAGE_KEY_USERDATA, JSON.stringify(userData))
+    },
+    loadUserData: () => {
+      const json = localStorage.getItem(LOCAL_STORAGE_KEY_USERDATA)
+      console.log("Json => ", json)
+      try{
+        return (json && json !== '') ? JSON.parse(json) : null
+      }
+      catch(e){
+        return null
+      }
+    },
+    clearUserData: () => {
+      localStorage.removeItem(LOCAL_STORAGE_KEY_USERDATA)
+    }
+  },
   AuthenService: {
     login: async (username, password) => {
       return await axios.post(
@@ -20,15 +40,6 @@ export const ServiceProvider = {
       )
       .then(resp => {
         const authToken = resp.data.auth_token
-        axios.interceptors.request.use(
-          (config) => {
-            config.headers.Authorization = `${authToken}`;
-            return config;
-          },
-          (error) => {
-            return Promise.reject(error);
-          }
-        );
 
         return resp
       })
@@ -42,6 +53,17 @@ export const ServiceProvider = {
         }
       )
     },
+    addInterceptor: (authToken) => {
+      axios.interceptors.request.use(
+        (config) => {
+          config.headers.Authorization = `${authToken}`;
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+      );
+    }
   },
   VideoService: {
     getVideos: async () => {

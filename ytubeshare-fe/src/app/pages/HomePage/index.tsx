@@ -4,7 +4,7 @@ import { NavBar } from 'app/components/NavBar';
 import { UserOutlined, CheckOutlined } from '@ant-design/icons';
 import { Button, Col, Divider, Input, Layout, Menu, Modal, Row, Space, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { onRequestLogin } from 'store/UserDataReducer';
+import { onRelogin, onRequestLogin, userLogout } from 'store/UserDataReducer';
 import { UserData } from 'types/UserData';
 import './style.scss';
 const { Header, Content, Footer, Sider } = Layout;
@@ -16,6 +16,12 @@ export function HomePage() {
   const [password, setPassword] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const [loginButtonText, setLoginButtonText] = React.useState('Login')
+
+  //Initial 
+  React.useEffect(() => {
+    console.log("Dispatch Relogin")
+    dispatch(onRelogin({}))
+  }, [])
   
   const appState: any = useSelector(state => state)
 
@@ -33,7 +39,7 @@ export function HomePage() {
 
   }
   const onLogoutBtnClicked = () => {
-
+    dispatch(userLogout({}))
   }
 
   const requestLogin = () => {

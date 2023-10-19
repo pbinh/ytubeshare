@@ -28,6 +28,7 @@ function* callToGetToken(action) {
   try{
     const payload = action.payload;
     const resp = yield call(getToken, payload);
+    ServiceProvider.AuthenService.addInterceptor(resp.auth_token)
     console.log("Success get token", resp.auth_token)
     yield put(onLoginSuccess({ ...payload, auth_token: resp.auth_token }));
   }
@@ -36,7 +37,17 @@ function* callToGetToken(action) {
     console.log(e)
     yield put(onLoginFailed({ ...action.payload }));
   }
-  
+}
+
+function* reloginLogic(action) {
+  const userData = ServiceProvider.LocalStorageService.loadUserData()
+  console.log("Inside Relogin Saga")
+  console.log("Loaded User Data From Local", userData)
+  if(userData){
+    ServiceProvider.AuthenService.addInterceptor(userData.auth_token)
+    yield put(onReloginSuccess(userData))
+  }
+    
 }
 
 export function* getTokenSaga() {
@@ -44,16 +55,30 @@ export function* getTokenSaga() {
   yield takeLatest(onRequestLogin, callToGetToken);
 }
 
+export function* reloginSaga() {
+  console.log("Inside getTokenSaga")
+  yield takeLatest(onRelogin, reloginLogic);
+}
+
 const userData = createSlice({
   name: 'userData',
   initialState,
   reducers: {
+    onRelogin: (state, action) => {
+      return { ...state, isSuccessLogin: false, isFailedLogin: false }
+    },
+    onReloginSuccess: (state, action) => {
+      return {...action.payload}
+    },
     onRequestLogin: (state, action) => {
       return { ...state, email: action.payload.username, password: action.payload.password, isSuccessLogin: false, isFailedLogin: false }
     },
     onLoginSuccess: (state, action) => {
-      // console.log("Inside Success Login Reducer ==>")
-      return { ...state, email: action.payload.username, isLoading: false, auth_token: action.payload.auth_token, isSuccessLogin: true, isFailedLogin: false }
+      const userData = { ...state, isLoading: false, auth_token: action.payload.auth_token, isSuccessLogin: true, isFailedLogin: false }
+      console.log("User to be saved in local ", userData)
+      ServiceProvider.LocalStorageService.persistUserData(userData)
+
+      return userData
     },
     onLoginFailed: (state, action) => {
       return { ...state, isLoading: false, auth_token: undefined, isLogined: false, isFailedLogin: true, isSuccessLogin: false }
@@ -67,11 +92,15 @@ const userData = createSlice({
     onRegisterFailed: (state, action) => {
       return { ...state, userData: action.payload, isLoading: false };
     },
-    userLogout: (state, action) => {},
+    userLogout: (state, action) => {
+      ServiceProvider.LocalStorageService.clearUserData()
+
+      return initialState
+    },
   },
 });
 
-export const { onRequestLogin, userLogout, onLoginSuccess, onLoginFailed, onRequestRegister, onRegisterSuccess, onRegisterFailed } =
+export const { onRequestLogin, userLogout, onLoginSuccess, onLoginFailed, onRequestRegister, onRegisterSuccess, onRegisterFailed, onRelogin, onReloginSuccess } =
   userData.actions;
 
 export default userData.reducer;
