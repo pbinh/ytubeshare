@@ -5,13 +5,11 @@ import { UserOutlined, CheckOutlined, YoutubeOutlined, ShareAltOutlined } from '
 import { Button, Card, Col, Divider, Empty, Input, Layout, Menu, Modal, Row, Space, Typography, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { onRelogin, onRequestLogin, userLogout } from 'store/UserDataReducer';
-import { UserData } from 'types/UserData';
 import './style.scss';
-import { onAddVideo, onFetchVideos } from 'store/VideoDataReducer';
+import { onAddVideo, onFetchVideos, onReceiveNewVideo } from 'store/VideoDataReducer';
 import { VideoManager } from 'types/YoutubeVideo';
 import VideoPlayer from '../../components/CustomYoutubePlayer';
-import type { NotificationPlacement } from 'antd/es/notification/interface';
-
+import { createConsumer, Channel } from "@rails/actioncable";
 const { Header, Content, Footer, Sider } = Layout;
 export function HomePage() {
   const dispatch = useDispatch();
@@ -37,7 +35,34 @@ export function HomePage() {
 
   //Ready to fetch data
   React.useEffect(() => {
-    dispatch(onFetchVideos({}))
+    if(isStartToFetchData){
+      dispatch(onFetchVideos({}))
+
+      const consumer = createConsumer("ws://127.0.0.1:3000/cable");
+      console.log("Done handshake")
+      const channel : Channel = consumer.subscriptions.create("NotificationsChannel", {
+        connected() {
+          console.log("Connected to MyChannel");
+        },
+        received(data: any) {
+          console.log("Received message:", data.message);
+          const json = data.message
+          const newVideo = JSON.parse(json)
+          dispatch(onReceiveNewVideo(newVideo))
+          openNotification(
+            newVideo.email + " shared a video", 
+            newVideo.title
+          )
+        },
+        disconnected() {
+          console.log("Disconnected from MyChannel");
+        },
+      });
+  
+      return () => {
+        consumer.subscriptions.remove(channel)
+      };
+    }
   }, [isStartToFetchData])
 
   const appState: any = useSelector(state => state)
@@ -74,6 +99,10 @@ export function HomePage() {
   const isFailedLogin = appState?.userData?.isFailedLogin;
 
   if (isSuccessLogin) {
+    if(!isStartToFetchData){
+      setIsStartToFetchData(true)
+    }
+
     console.log("Current user data", appState)
     setTimeout(() => {
       setLoginButtonText("Success Redirect to Home...")
@@ -152,8 +181,8 @@ export function HomePage() {
                               <Col span={16}>
                                 <Space direction='vertical'>
                                   <Typography.Title level={5}>{video.title}</Typography.Title>
-                                  <Typography.Text>Share by: {'no name'}</Typography.Text>
-                                  <Typography.Text>{video.description}</Typography.Text>
+                                  <Typography.Text>Share by: {video.email}</Typography.Text>
+                                  <Typography.Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }}>{video.description}</Typography.Paragraph>
                                 </Space>
                               </Col>
                             </Row>

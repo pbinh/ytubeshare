@@ -102,7 +102,8 @@ const videos = createSlice({
       return { ...state, isFetching: false, isFailedAddedVideo: true }
     },
     onReceiveNewVideo: (state, action) => {
-      return {...state, ...action.payload}
+      const newVideos = [action.payload, ...state.videos]
+      return {...state, videos: newVideos}
     }
   },
 });

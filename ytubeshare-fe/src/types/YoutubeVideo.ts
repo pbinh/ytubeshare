@@ -11,6 +11,7 @@ export interface YoutubeVideo{
     url? : string
     description?: string
     metadata?: string
+    email? : string
 }
 
 export interface VideoManager{
