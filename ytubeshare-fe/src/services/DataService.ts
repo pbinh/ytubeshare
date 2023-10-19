@@ -78,6 +78,11 @@ export const ServiceProvider = {
         API_LIST.VIDEOS,
         video
       )
+    },
+    getYoutubeVideoDescription: async (youtubeId) => {
+      return await axios.get(
+        `https://www.googleapis.com/youtube/v3/videos?key=AIzaSyDQvCbxINcLBbZlwYiE9guxTFvqILkExBQ&part=snippet&id=${youtubeId}`
+      )
     }
   },
 };

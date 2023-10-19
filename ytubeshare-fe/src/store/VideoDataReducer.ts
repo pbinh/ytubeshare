@@ -7,7 +7,9 @@ import { VideoManager, YoutubeVideo } from 'types/YoutubeVideo';
 
 const initialState: VideoManager = {
   videos: [],
-  isFetching: true
+  isFetching: true,
+  isSuccessAddedVideo: false,
+  isFailedAddedVideo: false
 };
 
 const callApiToFetchVideos = (payload) => {
@@ -37,6 +39,46 @@ export function* fetchVideosSaga() {
   yield takeLatest(onFetchVideos, fetchVideos);
 }
 
+const callApiToAddVideo = (url:string) => {
+  const youtubeId = url.substring(url.indexOf("?v=") + 3, url.length)
+
+  return ServiceProvider
+          .VideoService
+          .getYoutubeVideoDescription(youtubeId)
+          .then(resp => {
+            const youtubeData = resp.data.items[0].snippet
+
+            const {title, description} = youtubeData
+            
+            return ServiceProvider
+                    .VideoService.addVideo({
+                      title: title,
+                      description: description,
+                      url: url
+                    })
+                    .then(resp2 => resp2.data)
+          })
+}
+
+function* addVideo(action) {
+  try{
+    const url = action.payload;
+    const data = yield call(callApiToAddVideo, url);
+    console.log("Success get videos", data.videos)
+    yield put(onAddVideoSuccess({}));
+  }
+  catch(e) {
+    console.log("Failed get token")
+    console.log(e)
+    yield put(onAddVideoFailed({}));
+  }
+} 
+
+export function* addVideoSaga() {
+  console.log("Inside getTokenSaga")
+  yield takeLatest(onAddVideo, addVideo);
+}
+
 const videos = createSlice({
   name: 'userData',
   initialState,
@@ -50,10 +92,22 @@ const videos = createSlice({
     onFetchVideosFailed: (state, action) => {
       return { ...state, isFetching: false}
     },
+    onAddVideo: (state, action) => {
+      return { ...state, isFetching: true, isSuccessAddedVideo: false, isFailedAddedVideo: false }
+    },
+    onAddVideoSuccess: (state, action) => {
+      return { ...state, isFetching: false, isSuccessAddedVideo: true }
+    },
+    onAddVideoFailed: (state, action) => {
+      return { ...state, isFetching: false, isFailedAddedVideo: true }
+    },
+    onReceiveNewVideo: (state, action) => {
+      return {...state, ...action.payload}
+    }
   },
 });
 
-export const { onFetchVideos, onFetchVideosSuccess, onFetchVideosFailed } =
+export const { onFetchVideos, onFetchVideosSuccess, onFetchVideosFailed, onAddVideo, onAddVideoSuccess, onAddVideoFailed, onReceiveNewVideo } =
   videos.actions;
 
 export default videos.reducer;

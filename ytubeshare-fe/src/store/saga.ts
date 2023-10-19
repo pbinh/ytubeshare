@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects';
 import { getTokenSaga, reloginSaga } from './UserDataReducer';
-import { fetchVideosSaga } from './VideoDataReducer';
+import { addVideoSaga, fetchVideosSaga } from './VideoDataReducer';
 
 export default function* rootSaga() {
-  yield all([getTokenSaga(), reloginSaga(), fetchVideosSaga()]);
+  yield all([getTokenSaga(), reloginSaga(), fetchVideosSaga(), addVideoSaga()]);
 }

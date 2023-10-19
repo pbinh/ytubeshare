@@ -16,4 +16,6 @@ export interface YoutubeVideo{
 export interface VideoManager{
     videos: YoutubeVideo[]
     isFetching: boolean
+    isSuccessAddedVideo?: boolean
+    isFailedAddedVideo?: boolean
 }

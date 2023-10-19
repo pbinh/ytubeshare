@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { NavBar } from 'app/components/NavBar';
-import { UserOutlined, CheckOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Empty, Input, Layout, Menu, Modal, Row, Space, Typography } from 'antd';
+import { UserOutlined, CheckOutlined, YoutubeOutlined, ShareAltOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Divider, Empty, Input, Layout, Menu, Modal, Row, Space, Typography, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { onRelogin, onRequestLogin, userLogout } from 'store/UserDataReducer';
 import { UserData } from 'types/UserData';
 import './style.scss';
-import { onFetchVideos } from 'store/VideoDataReducer';
+import { onAddVideo, onFetchVideos } from 'store/VideoDataReducer';
 import { VideoManager } from 'types/YoutubeVideo';
 import VideoPlayer from '../../components/CustomYoutubePlayer';
+import type { NotificationPlacement } from 'antd/es/notification/interface';
 
 const { Header, Content, Footer, Sider } = Layout;
 export function HomePage() {
@@ -21,8 +22,12 @@ export function HomePage() {
   const [loading, setLoading] = React.useState(false)
   const [loginButtonText, setLoginButtonText] = React.useState('Login')
   const [isStartToFetchData, setIsStartToFetchData] = React.useState(false)
+  const [openShareModal, setOpenShareModel] = React.useState(false)
+  const [youtubeUrl, setYoutubeUrl] = React.useState('')
 
   const videos: VideoManager = useSelector<any, VideoManager>(state => state.videos)
+
+  const [api, contextHolder] = notification.useNotification();
 
   //Initial 
   React.useEffect(() => {
@@ -48,7 +53,7 @@ export function HomePage() {
     setOpen(true)
   }
   const onShareBtnClicked = () => {
-
+    setOpenShareModel(true)
   }
   const onLogoutBtnClicked = () => {
     dispatch(userLogout({}))
@@ -87,6 +92,20 @@ export function HomePage() {
       setLoading(false);
     }, 3000);
   }
+  
+  const openNotification = (title, message) => {
+    api.open({
+      message: title,
+      description: message,
+      placement: 'topRight',
+    })
+  }
+
+  const onRequestSharing = () => {
+    //TODO:
+    // 1. Validate youtube URL
+    dispatch(onAddVideo(youtubeUrl))
+  }
 
   return (
     <>
@@ -110,37 +129,37 @@ export function HomePage() {
               <div className="max-width-holder">
                 <Row gutter={[1, 20]}>
                   {
-                    videos.videos.length == 0 
+                    videos.videos.length == 0
                       ? <Empty
-                          imageStyle={{ height: 100 }}
-                          description={
-                            <span style={{color: 'white'}}>
-                              System does not have any videos, Please share some ^^
-                            </span>
-                          }
-                        >
-                          <Button type="primary" style={{fontWeight: 800}}>Share Now</Button>
-                        </Empty>
+                        imageStyle={{ height: 100 }}
+                        description={
+                          <span style={{ color: 'white' }}>
+                            System does not have any videos, Please share some ^^
+                          </span>
+                        }
+                      >
+                        <Button onClick={() => setOpenShareModel(true)} type="primary" style={{ fontWeight: 800 }}>Share Now</Button>
+                      </Empty>
                       : videos.videos.map(video => {
-                          return <Col span={24}>
-                            <Card>
-                              <Row gutter={10}>
-                                <Col span={8}>
-                                  <VideoPlayer
-                                    videoId={video.url}
-                                  />
-                                </Col>
-                                <Col span={16}>
-                                  <Space direction='vertical'>
-                                    <Typography.Title level={5}>{video.title}</Typography.Title>
-                                    <Typography.Text>Share by: {'no name'}</Typography.Text>
-                                    <Typography.Text>{video.description}</Typography.Text>
-                                  </Space>
-                                </Col>
-                              </Row>
-                            </Card>
-                          </Col>
-                        })
+                        return <Col span={24}>
+                          <Card>
+                            <Row gutter={10}>
+                              <Col span={8}>
+                                <VideoPlayer
+                                  videoId={video.url}
+                                />
+                              </Col>
+                              <Col span={16}>
+                                <Space direction='vertical'>
+                                  <Typography.Title level={5}>{video.title}</Typography.Title>
+                                  <Typography.Text>Share by: {'no name'}</Typography.Text>
+                                  <Typography.Text>{video.description}</Typography.Text>
+                                </Space>
+                              </Col>
+                            </Row>
+                          </Card>
+                        </Col>
+                      })
                   }
                 </Row>
               </div>
@@ -178,6 +197,30 @@ export function HomePage() {
           </Col>
         </Row>
       </Modal>
+
+      <Modal
+        open={openShareModal}
+        title="Sharing is happiness"
+        onCancel={() => setOpenShareModel(false)}
+        footer={null}
+      >
+        <Row style={{ paddingTop: 10 }} gutter={[10, 10]} justify={'center'} align={'middle'}>
+          <Col span={20}>
+            <Input value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} placeholder="URL - E.g: https://www.youtube.com/watch?v=o27bgPw8cpA&t=2096s " prefix={<YoutubeOutlined />} />
+          </Col>
+          <Col span={16}>
+            <Button
+              icon={isSuccessLogin ? <ShareAltOutlined /> : null}
+              loading={loading}
+              style={{ width: '100%' }}
+              onClick={() => { onRequestSharing() }} type="primary">
+              Share to everyone
+            </Button>
+          </Col>
+        </Row>
+      </Modal>
+
+      {contextHolder}
     </>
   );
 }
