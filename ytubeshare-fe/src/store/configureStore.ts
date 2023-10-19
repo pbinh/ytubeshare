@@ -3,6 +3,7 @@ import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
 
 import { createReducer } from './reducers';
+import rootSaga from './saga';
 
 export function configureAppStore() {
   const reduxSagaMonitorOptions = {};
@@ -28,6 +29,8 @@ export function configureAppStore() {
       process.env.PUBLIC_URL.length > 0,
     enhancers,
   });
+
+  runSaga(rootSaga)
 
   return store;
 }

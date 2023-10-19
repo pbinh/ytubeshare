@@ -13,7 +13,7 @@ export function NotFoundPage() {
         <title>404 Page Not Found</title>
         <meta name="description" content="Page not found" />
       </Helmet>
-      <NavBar />
+      {/* <NavBar onLoginRegisterBtnClicked={() => {}} /> */}
       <Wrapper>
         <Title>
           4
