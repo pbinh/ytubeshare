@@ -48,7 +48,7 @@ export const ServiceProvider = {
       return await axios.post(
         API_LIST.REGISTER,
         {
-          username: username,
+          email: username,
           password: password
         }
       )

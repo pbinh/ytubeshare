@@ -10,9 +10,11 @@ import { onAddVideo, onFetchVideos, onReceiveNewVideo } from 'store/VideoDataRed
 import { VideoManager } from 'types/YoutubeVideo';
 import VideoPlayer from '../../components/CustomYoutubePlayer';
 import { createConsumer, Channel } from "@rails/actioncable";
+import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout;
 export function HomePage() {
   const dispatch = useDispatch();
+  const whiteTextColor = {color: 'white'}
 
   const [open, setOpen] = React.useState(false);
   const [username, setUsername] = React.useState('')
@@ -26,6 +28,7 @@ export function HomePage() {
   const videos: VideoManager = useSelector<any, VideoManager>(state => state.videos)
 
   const [api, contextHolder] = notification.useNotification();
+  const [liveChannel, setLiveChannel] = React.useState<any>(null)
 
   //Initial 
   React.useEffect(() => {
@@ -37,7 +40,7 @@ export function HomePage() {
   React.useEffect(() => {
     if(isStartToFetchData){
       dispatch(onFetchVideos({}))
-
+      
       const consumer = createConsumer("ws://127.0.0.1:3000/cable");
       console.log("Done handshake")
       const channel : Channel = consumer.subscriptions.create("NotificationsChannel", {
@@ -49,8 +52,10 @@ export function HomePage() {
           const json = data.message
           const newVideo = JSON.parse(json)
           dispatch(onReceiveNewVideo(newVideo))
+          const currentUser = appState?.userData?.email
+          const email = newVideo.email === currentUser ? "You just" : newVideo.email
           openNotification(
-            newVideo.email + " shared a video", 
+            email + " shared a video", 
             newVideo.title
           )
         },
@@ -58,6 +63,11 @@ export function HomePage() {
           console.log("Disconnected from MyChannel");
         },
       });
+
+      setLiveChannel({
+        consumer: consumer,
+        channel: channel
+      })
   
       return () => {
         consumer.subscriptions.remove(channel)
@@ -82,6 +92,15 @@ export function HomePage() {
   }
   const onLogoutBtnClicked = () => {
     dispatch(userLogout({}))
+
+    //Clear live channel
+    if(liveChannel){
+      liveChannel.consumer.subscriptions.remove(liveChannel.channel)
+    }
+    
+    //Reset initial state
+    setIsStartToFetchData(false)
+    setLoginButtonText("Login")
   }
 
   const requestLogin = () => {
@@ -136,6 +155,11 @@ export function HomePage() {
     dispatch(onAddVideo(youtubeUrl))
   }
 
+  const navigate = useNavigate()
+  const navigateToRegisterPage = () => {
+    navigate("/register")
+  }
+
   return (
     <>
       <div className="root-container">
@@ -156,7 +180,9 @@ export function HomePage() {
           <Content className="main-content">
             <Row className="main-background" justify="center">
               <div className="max-width-holder">
-                <Row gutter={[1, 20]}>
+              {
+                isStartToFetchData 
+                  ? <Row gutter={[1, 20]}>
                   {
                     videos.videos.length == 0
                       ? <Empty
@@ -169,13 +195,13 @@ export function HomePage() {
                       >
                         <Button onClick={() => setOpenShareModel(true)} type="primary" style={{ fontWeight: 800 }}>Share Now</Button>
                       </Empty>
-                      : videos.videos.map(video => {
-                        return <Col span={24}>
+                      : videos.videos.map((video, key) => {
+                        return <Col key={key} span={24}>
                           <Card>
                             <Row gutter={10}>
                               <Col span={8}>
                                 <VideoPlayer
-                                  videoId={video.url}
+                                  videoId={video.url?.substring(video.url.indexOf('?v=') + 3, video.url.length)}
                                 />
                               </Col>
                               <Col span={16}>
@@ -191,6 +217,16 @@ export function HomePage() {
                       })
                   }
                 </Row>
+                : <Space direction='vertical' align='center'>
+                  <Typography.Title style={whiteTextColor} >
+                    Welcome to Youtube Sharing App
+                  </Typography.Title>
+                  <Typography.Link onClick={() => setOpen(true)}  style={{fontSize: 27}}>
+                    Please Login to Watch / Share Videos
+                  </Typography.Link>
+                </Space>
+              }
+                
               </div>
             </Row>
           </Content>
@@ -220,7 +256,7 @@ export function HomePage() {
             </Button>
           </Col>
           <Col span={16}>
-            <Typography.Link>
+            <Typography.Link onClick={() => navigateToRegisterPage()}>
               {"Please click this link if you don't have account >"}
             </Typography.Link>
           </Col>
