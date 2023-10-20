@@ -102,7 +102,7 @@ export function RegisterPage() {
           <Content className="main-content">
             <Row className="main-background" justify="center">
               <Row className="max-width-holder">
-                <Col lg={8} md={8} sm={20} xs={24} >
+                <Col xl={10} xxl={10} lg={8} md={8} sm={20} xs={24} >
                   <Card className='user-data-container' title={'Thank you for Registration'}>
                     <Form
                       {...layout}
