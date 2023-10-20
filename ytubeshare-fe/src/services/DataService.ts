@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const root = 'http://localhost:3000';
+const root = 'http://0.0.0.0:3000';
 const API_LIST = {
   VIDEOS: `${root}/api/videos`,
   LOGIN: `${root}/api/login`,

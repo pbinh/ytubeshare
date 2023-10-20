@@ -41,7 +41,7 @@ export function HomePage() {
     if(isStartToFetchData){
       dispatch(onFetchVideos({}))
       
-      const consumer = createConsumer("ws://127.0.0.1:3000/cable");
+      const consumer = createConsumer("ws://0.0.0.0:3000/cable");
       console.log("Done handshake")
       const channel : Channel = consumer.subscriptions.create("NotificationsChannel", {
         connected() {
