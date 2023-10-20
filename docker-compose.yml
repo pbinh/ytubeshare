@@ -29,7 +29,6 @@ services:
       - redis
     environment:
       DATABASE_URL: mysql2://db:3306/ytubeshare
-    command: ["./setup-wait-sql.sh", "db", "15", "bundle", "exec", "rails", "server", "-p", "3000"]
     volumes:
       - ./ytubeshare-be:/app
       
