@@ -1,0 +1,3 @@
+[submodule "ytubeshare-be"]
+	path = ytubeshare-be
+	url = https://github.com/pbinh/ytubeshare-be.git
