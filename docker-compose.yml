@@ -1,23 +1,31 @@
 version: '3'
 services:
+  # Redis service
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
   # Database service
   db:
+    platform: linux/x86_64
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: YtubeSh@re
-      MYSQL_DATABASE: YtubeSh@re
+      MYSQL_DATABASE: ytubeshare
 
   # Rails API service
   api:
     build:
       context: ./ytubeshare-be
-      dockerfile: Dockerfile
+      # dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - redis
     environment:
-      DATABASE_URL: mysql2://root:YtubeSh@re@db/ytubeshare
+      DATABASE_URL: mysql2://root:YtubeSh@re/ytubeshare
     volumes:
       - ./ytubeshare-be:/app
 
