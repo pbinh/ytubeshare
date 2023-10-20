@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const root = 'http://35.240.222.156:3000';
+const root = 'https://35.240.222.156';
 const API_LIST = {
   VIDEOS: `${root}/api/videos`,
   LOGIN: `${root}/api/login`,
