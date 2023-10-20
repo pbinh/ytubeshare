@@ -13,3 +13,5 @@ VI. Docker Deployment: Instructions for deploying the application using Docker, 
 VII. Usage: A brief guide outlining how to use the application, including any specific features or functionality the reviewer should be aware of.
 
 Troubleshooting: Common issues that may arise during setup and their potential solutions.
+
+git submodule update --init --recursive
