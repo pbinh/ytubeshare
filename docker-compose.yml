@@ -10,12 +10,15 @@ services:
   db:
     platform: linux/x86_64
     image: mysql:5.7
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: YtubeSh@re
       MYSQL_DATABASE: ytubeshare
 
   # Rails API service
   api:
+    platform: linux/x86_64
     build:
       context: ./ytubeshare-be
       # dockerfile: Dockerfile
@@ -25,9 +28,11 @@ services:
       - db
       - redis
     environment:
-      DATABASE_URL: mysql2://root:YtubeSh@re/ytubeshare
+      DATABASE_URL: mysql2://db:3306/ytubeshare
+    command: ["./setup-wait-sql.sh", "db", "15", "bundle", "exec", "rails", "server", "-p", "3000"]
     volumes:
       - ./ytubeshare-be:/app
+      
 
   # ReactJS service
   react:
