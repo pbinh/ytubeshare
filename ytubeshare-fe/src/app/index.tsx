@@ -23,11 +23,11 @@ export function App() {
   return (
     <BrowserRouter>
       <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
+        titleTemplate="Remitano - YtubeShare"
+        defaultTitle="Remitano - YtubeShare"
         htmlAttributes={{ lang: i18n.language }}
       >
-        <meta name="description" content="A React Boilerplate application" />
+        <meta name="description" content="Remitano - YtubeShare" />
       </Helmet>
 
       <Routes>
