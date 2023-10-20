@@ -1,0 +1,41 @@
+.root-container {
+
+    .main-content {
+        padding: "8px 16px 8px 16px";
+        min-height: 280px;
+        width: 100%;
+    }
+
+    .main-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    .max-width-holder {
+        // max-width: 1600px;
+        width: 100%;
+        // min-height: 1000px;
+        // min-width: 1000px;
+        // border-radius: 10px;
+        // box-shadow: 0 3px 10px 0 rgba(1, 0, 0, 0.3);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        padding: 63px;
+        align-items: flex-start;
+    }
+
+    .ant-layout {
+        background: rgb(10,10,10);
+    }
+
+
+    .ant-form-item-label label {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .user-data-container{
+        max-height: 600px;
+        width: 100%;
+    }
+}

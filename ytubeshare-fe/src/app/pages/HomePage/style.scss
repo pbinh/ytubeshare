@@ -1,0 +1,71 @@
+.root-container {
+
+    .main-content {
+        padding: "8px 16px 8px 16px";
+        min-height: 280px;
+        width: 100%;
+    }
+
+    .main-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    .max-width-holder {
+        max-width: 1600px;
+        // width: 100%;
+        min-height: 1000px;
+        min-width: 386px;
+        // border-radius: 10px;
+        // box-shadow: 0 3px 10px 0 rgba(1, 0, 0, 0.3);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        padding: 63px;
+        padding-left: 136px;
+        padding-right: 136px;
+        align-items: flex-start;
+    }
+
+    .ant-layout {
+        background: rgb(10,10,10);
+    }
+
+    .ant-input:focus {
+        border-color: var(--primaryColor);
+        outline: 0;
+        -webkit-box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+        box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+    }
+
+    .ant-input:hover {
+        border-color: var(--primaryColor);
+        outline: 0;
+        -webkit-box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+        box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+    }
+
+    .ant-select-customize-input:focus {
+        border-color: var(--primaryColor);
+        outline: 0;
+        -webkit-box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+        box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+    }
+
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover {
+        border-color: var(--primaryColor);
+        outline: 0;
+        -webkit-box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+        box-shadow: 0 0 0 2px rgba(87, 168, 233, 0.2);
+    }
+
+    ::selection {
+        color: var(--secondaryColor);
+        background: var(--secondaryColor);
+    }
+
+    .ant-form-item-label label {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+}

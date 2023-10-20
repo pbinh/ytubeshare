@@ -7,7 +7,7 @@ import { PageWrapper } from '../PageWrapper';
 import { useSelector } from 'react-redux';
 import { LoginedNav } from './LoginedNav';
 
-export function NavBar({onLoginRegisterBtnClicked, onShareBtnClicked, onLogoutBtnClicked }) {
+export function RegisterNavBar() {
   const isLogined = useSelector<any>(state => state.userData.auth_token)
   const email = useSelector<any>(state => state.userData.email)
   
@@ -15,12 +15,7 @@ export function NavBar({onLoginRegisterBtnClicked, onShareBtnClicked, onLogoutBt
     <Wrapper>
       <PageWrapper>
         <Logo />
-        {
-          !isLogined 
-            ? <Nav onLoginRegisterBtnClicked={onLoginRegisterBtnClicked}/>
-            : <LoginedNav email={email} onLogoutBtnClicked={onLogoutBtnClicked} onShareBtnClicked={onShareBtnClicked}/>
-        }
-        
+        <Nav />
       </PageWrapper>
     </Wrapper>
   );

@@ -5,6 +5,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
 import { InjectedReducersType } from 'utils/types/injector-typings';
+import UserDataReducer from './UserDataReducer';
+import VideoDataReducer from './VideoDataReducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -16,6 +18,8 @@ export function createReducer(injectedReducers: InjectedReducersType = {}) {
   } else {
     return combineReducers({
       ...injectedReducers,
+      userData: UserDataReducer,
+      videos: VideoDataReducer
     });
   }
 }
