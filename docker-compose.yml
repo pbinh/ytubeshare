@@ -42,3 +42,11 @@ services:
       - "80:80"
     volumes:
       - ./ytubeshare-fe:/app
+
+  # Nginx proxy service
+  proxy:
+    build:
+      context: ./
+    ports:
+      - "443:443"
+
