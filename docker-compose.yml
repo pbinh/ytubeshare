@@ -29,6 +29,7 @@ services:
       - redis
     environment:
       DATABASE_URL: mysql2://db:3306/ytubeshare
+      REDIS_URL: redis://redis:6379/1
     volumes:
       - ./ytubeshare-be:/app
       
