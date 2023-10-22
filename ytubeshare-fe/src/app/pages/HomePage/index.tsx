@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout;
 export function HomePage() {
   const dispatch = useDispatch();
-  const whiteTextColor = {color: 'white'}
+  const whiteTextColor = { color: 'white' }
 
   const [open, setOpen] = React.useState(false);
   const [username, setUsername] = React.useState('')
@@ -38,12 +38,12 @@ export function HomePage() {
 
   //Ready to fetch data
   React.useEffect(() => {
-    if(isStartToFetchData){
+    if (isStartToFetchData) {
       dispatch(onFetchVideos({}))
-      
+
       const consumer = createConsumer("ws://35.240.222.156:3000/cable");
       console.log("Done handshake")
-      const channel : Channel = consumer.subscriptions.create("NotificationsChannel", {
+      const channel: Channel = consumer.subscriptions.create("NotificationsChannel", {
         connected() {
           console.log("Connected to MyChannel");
         },
@@ -55,7 +55,7 @@ export function HomePage() {
           const currentUser = appState?.userData?.email
           const email = newVideo.email === currentUser ? "You just" : newVideo.email
           openNotification(
-            email + " shared a video", 
+            email + " shared a video",
             newVideo.title
           )
         },
@@ -68,7 +68,7 @@ export function HomePage() {
         consumer: consumer,
         channel: channel
       })
-  
+
       return () => {
         consumer.subscriptions.remove(channel)
       };
@@ -94,10 +94,10 @@ export function HomePage() {
     dispatch(userLogout({}))
 
     //Clear live channel
-    if(liveChannel){
+    if (liveChannel) {
       liveChannel.consumer.subscriptions.remove(liveChannel.channel)
     }
-    
+
     //Reset initial state
     setIsStartToFetchData(false)
     setLoginButtonText("Login")
@@ -118,7 +118,7 @@ export function HomePage() {
   const isFailedLogin = appState?.userData?.isFailedLogin;
 
   if (isSuccessLogin) {
-    if(!isStartToFetchData){
+    if (!isStartToFetchData) {
       setIsStartToFetchData(true)
     }
 
@@ -140,7 +140,7 @@ export function HomePage() {
       setLoading(false);
     }, 3000);
   }
-  
+
   const openNotification = (title, message) => {
     api.open({
       message: title,
@@ -176,13 +176,11 @@ export function HomePage() {
           onShareBtnClicked={onShareBtnClicked}
         />
 
-        <Layout className="below-content">
-          <Content className="main-content">
-            <Row className="main-background" justify="center">
-              <div className="max-width-holder">
-              {
-                isStartToFetchData 
-                  ? <Row gutter={[1, 20]}>
+        {/* <Space align='center'> */}
+          <Content className='max-width-holder'>
+            {
+              isStartToFetchData
+                ? <Row gutter={[1, 20]}>
                   {
                     videos.videos.length == 0
                       ? <Empty
@@ -197,19 +195,19 @@ export function HomePage() {
                       </Empty>
                       : videos.videos.map((video, key) => {
                         return <Col key={key} span={24}>
-                          <Card>
-                            <Row gutter={10}>
-                              <Col span={8}>
+                          <Card >
+                            <Row gutter={10} align={'middle'}>
+                              <Col xxl={8} xl={8} lg={8} md={8} xs={24} sm={24}>
                                 <VideoPlayer
                                   videoId={video.url?.substring(video.url.indexOf('?v=') + 3, video.url.length)}
                                 />
                               </Col>
-                              <Col span={16}>
-                                <Space direction='vertical'>
-                                  <Typography.Title level={5}>{video.title}</Typography.Title>
+                              <Col xxl={16} xl={16} lg={12} md={12} xs={24} sm={24}>
+                                <div style={{overflow: 'auto', display: 'flex', flexDirection: 'column'}}>
+                                  <Typography.Title ellipsis={true} level={5}>{video.title}</Typography.Title>
                                   <Typography.Text>Share by: {video.email}</Typography.Text>
-                                  <Typography.Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }}>{video.description}</Typography.Paragraph>
-                                </Space>
+                                  <Typography.Paragraph style={{minWidth: 300}} ellipsis={{ rows: 3, expandable: true, symbol: 'more' }}>{video.description}</Typography.Paragraph>
+                                </div>
                               </Col>
                             </Row>
                           </Card>
@@ -221,16 +219,13 @@ export function HomePage() {
                   <Typography.Title style={whiteTextColor} >
                     Welcome to Youtube Sharing App
                   </Typography.Title>
-                  <Typography.Link onClick={() => setOpen(true)}  style={{fontSize: 27}}>
+                  <Typography.Link onClick={() => setOpen(true)} style={{ fontSize: 27 }}>
                     Please Login to Watch / Share Videos
                   </Typography.Link>
                 </Space>
-              }
-                
-              </div>
-            </Row>
+            }
           </Content>
-        </Layout>
+        {/* </Space> */}
       </div>
 
       <Modal
