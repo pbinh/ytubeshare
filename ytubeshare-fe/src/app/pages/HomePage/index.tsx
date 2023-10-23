@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { NavBar } from 'app/components/NavBar';
 import { UserOutlined, CheckOutlined, YoutubeOutlined, ShareAltOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Empty, Input, Layout, Menu, Modal, Row, Space, Typography, notification } from 'antd';
+import { Button, Card, Col, Divider, Empty, Form, Input, Layout, Menu, Modal, Row, Space, Typography, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { onRelogin, onRequestLogin, userLogout } from 'store/UserDataReducer';
 import './style.scss';
@@ -160,8 +160,18 @@ export function HomePage() {
     navigate("/register")
   }
 
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+
   return (
-    <Layout style={{height: '100%'}}>
+    <Layout style={{ height: '100%' }}>
       <Helmet>
         <title>Youtube Share</title>
         <meta
@@ -170,10 +180,10 @@ export function HomePage() {
         />
       </Helmet>
       <NavBar
-          onLoginRegisterBtnClicked={onLoginRegisterBtnClicked}
-          onLogoutBtnClicked={onLogoutBtnClicked}
-          onShareBtnClicked={onShareBtnClicked}
-        />
+        onLoginRegisterBtnClicked={onLoginRegisterBtnClicked}
+        onLogoutBtnClicked={onLogoutBtnClicked}
+        onShareBtnClicked={onShareBtnClicked}
+      />
       <div className="root-container">
         {/* <Space align='center'> */}
         <Content className='max-width-holder'>
@@ -214,7 +224,7 @@ export function HomePage() {
                     })
                 }
               </Row>
-              : <Space style={{marginBottom: '10%'}} direction='vertical' align='center'>
+              : <Space style={{ marginBottom: '10%' }} direction='vertical' align='center'>
                 <Typography.Title style={whiteTextColor} >
                   Welcome to Youtube Sharing App
                 </Typography.Title>
@@ -233,28 +243,44 @@ export function HomePage() {
         onCancel={handleCancel}
         footer={null}
       >
-        <Row style={{ paddingTop: 10 }} gutter={[10, 10]} justify={'center'} align={'middle'}>
-          <Col span={16}>
-            <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" prefix={<UserOutlined />} />
-          </Col>
-          <Col span={16}>
-            <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-          </Col>
-          <Col span={15}>
-            <Button
-              icon={isSuccessLogin ? <CheckOutlined /> : null}
-              loading={loading}
-              style={{ width: '100%' }}
-              onClick={() => requestLogin()} type="primary">
-              {loginButtonText}
-            </Button>
-          </Col>
-          <Col span={16}>
-            <Typography.Link onClick={() => navigateToRegisterPage()}>
-              {"Please click this link if you don't have account >"}
-            </Typography.Link>
-          </Col>
-        </Row>
+        <Form
+          name="basic"
+          labelCol={{ span: 0 }}
+          wrapperCol={{ span: 24 }}
+          style={{ maxWidth: 600 }}
+          initialValues={{ remember: true }}
+          onFinish={requestLogin}
+          autoComplete="off"
+          validateMessages={validateMessages}
+        >
+          <Row style={{ paddingTop: 10 }} gutter={[10, 10]} justify={'center'} align={'middle'}>
+            <Col span={16}>
+              <Form.Item name={['email']} label="Email" rules={[{ type: 'email' }]}>
+                <Input placeholder="Email: abcde@domain.xyz" prefix={<UserOutlined />} />
+              </Form.Item>
+            </Col>
+            <Col span={16}>
+              <Form.Item label="Password" name="password" rules={[{ required: true, min: 6, message: 'Password must be minimum 6 characters.', }]}>
+                <Input.Password placeholder="Your Password" />
+              </Form.Item>
+            </Col>
+            <Col span={15}>
+              <Button
+                htmlType="submit"
+                icon={isSuccessLogin ? <CheckOutlined /> : null}
+                loading={loading}
+                style={{ width: '100%' }}
+                type="primary">
+                {loginButtonText}
+              </Button>
+            </Col>
+            <Col span={16}>
+              <Typography.Link onClick={() => navigateToRegisterPage()}>
+                {"Please click this link if you don't have account >"}
+              </Typography.Link>
+            </Col>
+          </Row>
+        </Form>
       </Modal>
 
       <Modal
