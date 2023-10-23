@@ -3,21 +3,21 @@ import { UserOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Row, Space } from 'antd';
 
 
-export const Nav = ({onLoginRegisterBtnClicked}) => {
-  const style = { width: '100%'}
+export const Nav = ({ onLoginRegisterBtnClicked }) => {
+  const style = { width: '100%', height: '100%' }
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
 
   return (
-    <Row gutter={9}>
-      <Col xs={0} span={7}>
-        <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" prefix={<UserOutlined />} />
+    <Row style={style} gutter={9}>
+      <Col xs={0} sm={16} md={18} lg={18}>
+        <div className='flex-center-end'>
+          <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" prefix={<UserOutlined />} />
+          <Input.Password style={{marginLeft: 10}} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+        </div>
       </Col>
-      <Col xs={0} span={7}>
-        <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-      </Col>
-      <Col xs={12} span={10}>
-        <Button onClick={() => onLoginRegisterBtnClicked(username, password)} style={style} type="primary">Login / Register</Button>
+      <Col xs={24} sm={8} md={6} lg={6} className='flex-center-end'>
+        <Button onClick={() => onLoginRegisterBtnClicked(username, password)} type="primary">Login / Register</Button>
       </Col>
     </Row>
   );

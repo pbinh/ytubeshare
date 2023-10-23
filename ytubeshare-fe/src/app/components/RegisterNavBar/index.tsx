@@ -5,7 +5,6 @@ import { StyleConstants } from 'styles/StyleConstants';
 import { Nav } from './Nav';
 import { PageWrapper } from '../PageWrapper';
 import { useSelector } from 'react-redux';
-import { LoginedNav } from './LoginedNav';
 
 export function RegisterNavBar() {
   const isLogined = useSelector<any>(state => state.userData.auth_token)

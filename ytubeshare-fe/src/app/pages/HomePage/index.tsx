@@ -214,7 +214,7 @@ export function HomePage() {
                     })
                 }
               </Row>
-              : <Space direction='vertical' align='center'>
+              : <Space style={{marginBottom: '10%'}} direction='vertical' align='center'>
                 <Typography.Title style={whiteTextColor} >
                   Welcome to Youtube Sharing App
                 </Typography.Title>

@@ -1,5 +1,4 @@
 .root-container {
-    
     .main-content {
         padding: "8px 16px 8px 16px";
         min-height: 280px;
@@ -11,7 +10,7 @@
     }
 
     .ant-layout {
-        background: rgb(10, 10, 10);
+        background: rgb(27, 27, 27);
     }
 
 
@@ -23,5 +22,6 @@
     .user-data-container {
         max-height: 600px;
         width: 100%;
+        margin-bottom: 27%;
     }
 }
