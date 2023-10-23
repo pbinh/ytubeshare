@@ -6,22 +6,26 @@ import { Nav } from './Nav';
 import { PageWrapper } from '../PageWrapper';
 import { useSelector } from 'react-redux';
 import { LoginedNav } from './LoginedNav';
+import { Col, Row } from 'antd';
 
-export function NavBar({onLoginRegisterBtnClicked, onShareBtnClicked, onLogoutBtnClicked }) {
+export function NavBar({ onLoginRegisterBtnClicked, onShareBtnClicked, onLogoutBtnClicked }) {
   const isLogined = useSelector<any>(state => state.userData.auth_token)
   const email = useSelector<any>(state => state.userData.email)
-  
+
   return (
-    <Wrapper>
-      <PageWrapper>
-        <Logo />
-        {
-          !isLogined 
-            ? <Nav onLoginRegisterBtnClicked={onLoginRegisterBtnClicked}/>
-            : <LoginedNav email={email} onLogoutBtnClicked={onLogoutBtnClicked} onShareBtnClicked={onShareBtnClicked}/>
-        }
-        
-      </PageWrapper>
+    <Wrapper className='menu-container'>
+      <Row className='menu-bar'>
+        <Col xs={8} sm={8} md={12}>
+          <Logo />
+        </Col>
+        <Col xs={16} sm={16} md={12}>
+          {
+            !isLogined
+              ? <Nav onLoginRegisterBtnClicked={onLoginRegisterBtnClicked} />
+              : <LoginedNav email={email} onLogoutBtnClicked={onLogoutBtnClicked} onShareBtnClicked={onShareBtnClicked} />
+          }
+        </Col>
+      </Row>
     </Wrapper>
   );
 }

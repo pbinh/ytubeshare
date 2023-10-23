@@ -161,70 +161,69 @@ export function HomePage() {
   }
 
   return (
-    <>
-      <div className="root-container">
-        <Helmet>
-          <title>Youtube Share</title>
-          <meta
-            name="YShareApp"
-            content="Sharing Your Favorite Youtube"
-          />
-        </Helmet>
-        <NavBar
+    <Layout style={{height: '100%'}}>
+      <Helmet>
+        <title>Youtube Share</title>
+        <meta
+          name="YShareApp"
+          content="Sharing Your Favorite Youtube"
+        />
+      </Helmet>
+      <NavBar
           onLoginRegisterBtnClicked={onLoginRegisterBtnClicked}
           onLogoutBtnClicked={onLogoutBtnClicked}
           onShareBtnClicked={onShareBtnClicked}
         />
-
+      <div className="root-container">
         {/* <Space align='center'> */}
-          <Content className='max-width-holder'>
-            {
-              isStartToFetchData
-                ? <Row gutter={[1, 20]}>
-                  {
-                    videos.videos.length == 0
-                      ? <Empty
-                        imageStyle={{ height: 100 }}
-                        description={
-                          <span style={{ color: 'white' }}>
-                            System does not have any videos, Please share some ^^
-                          </span>
-                        }
-                      >
-                        <Button onClick={() => setOpenShareModel(true)} type="primary" style={{ fontWeight: 800 }}>Share Now</Button>
-                      </Empty>
-                      : videos.videos.map((video, key) => {
-                        return <Col key={key} span={24}>
-                          <Card >
-                            <Row gutter={10} align={'middle'}>
-                              <Col xxl={8} xl={8} lg={8} md={8} xs={24} sm={24}>
-                                <VideoPlayer
-                                  videoId={video.url?.substring(video.url.indexOf('?v=') + 3, video.url.length)}
-                                />
-                              </Col>
-                              <Col xxl={16} xl={16} lg={12} md={12} xs={24} sm={24}>
-                                <div style={{overflow: 'auto', display: 'flex', flexDirection: 'column'}}>
-                                  <Typography.Title ellipsis={true} level={5}>{video.title}</Typography.Title>
-                                  <Typography.Text>Share by: {video.email}</Typography.Text>
-                                  <Typography.Paragraph style={{minWidth: 300}} ellipsis={{ rows: 3, expandable: true, symbol: 'more' }}>{video.description}</Typography.Paragraph>
-                                </div>
-                              </Col>
-                            </Row>
-                          </Card>
-                        </Col>
-                      })
-                  }
-                </Row>
-                : <Space direction='vertical' align='center'>
-                  <Typography.Title style={whiteTextColor} >
-                    Welcome to Youtube Sharing App
-                  </Typography.Title>
-                  <Typography.Link onClick={() => setOpen(true)} style={{ fontSize: 27 }}>
-                    Please Login to Watch / Share Videos
-                  </Typography.Link>
-                </Space>
-            }
-          </Content>
+        <Content className='max-width-holder'>
+          {
+            isStartToFetchData
+              ? <Row gutter={[1, 20]}>
+                {
+                  videos.videos.length == 0
+                    ? <Empty
+                      imageStyle={{ height: 100 }}
+                      description={
+                        <span style={{ color: 'white' }}>
+                          System does not have any videos, Please share some ^^
+                        </span>
+                      }
+                    >
+                      <Button onClick={() => setOpenShareModel(true)} type="primary" style={{ fontWeight: 800 }}>Share Now</Button>
+                    </Empty>
+                    : videos.videos.map((video, key) => {
+                      return <Col key={key} span={24}>
+                        <Card >
+                          <Row gutter={10} align={'middle'}>
+                            <Col xxl={8} xl={8} lg={8} md={8} xs={24} sm={24}>
+                              <VideoPlayer
+                                videoId={video.url?.substring(video.url.indexOf('?v=') + 3, video.url.length)}
+                              />
+                            </Col>
+                            <Col xxl={16} xl={16} lg={12} md={12} xs={24} sm={24}>
+                              <div style={{ overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+                                <Typography.Title ellipsis={true} level={5}>{video.title}</Typography.Title>
+                                <Typography.Text>Share by: {video.email}</Typography.Text>
+                                <Typography.Paragraph style={{ minWidth: 300 }} ellipsis={{ rows: 3, expandable: true, symbol: 'more' }}>{video.description}</Typography.Paragraph>
+                              </div>
+                            </Col>
+                          </Row>
+                        </Card>
+                      </Col>
+                    })
+                }
+              </Row>
+              : <Space direction='vertical' align='center'>
+                <Typography.Title style={whiteTextColor} >
+                  Welcome to Youtube Sharing App
+                </Typography.Title>
+                <Typography.Link onClick={() => setOpen(true)} style={{ fontSize: 27 }}>
+                  Please Login to Watch / Share Videos
+                </Typography.Link>
+              </Space>
+          }
+        </Content>
         {/* </Space> */}
       </div>
 
@@ -281,6 +280,6 @@ export function HomePage() {
       </Modal>
 
       {contextHolder}
-    </>
+    </Layout>
   );
 }

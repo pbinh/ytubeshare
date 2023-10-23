@@ -22,14 +22,6 @@ export function App() {
   
   return (
     <BrowserRouter>
-      <Helmet
-        titleTemplate="Remitano - YtubeShare"
-        defaultTitle="Remitano - YtubeShare"
-        htmlAttributes={{ lang: i18n.language }}
-      >
-        <meta name="description" content="Remitano - YtubeShare" />
-      </Helmet>
-
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage/>}/>

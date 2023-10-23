@@ -1,0 +1,25 @@
+.one-line-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+}
+
+.flex-center-end{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 100%;
+}
+
+.menu-container{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.menu-bar{
+    max-width: 1363px;
+    min-width: 300px;
+    width: 100%;
+}

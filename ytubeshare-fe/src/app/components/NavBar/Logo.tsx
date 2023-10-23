@@ -1,12 +1,18 @@
+import { Col, Row } from 'antd';
 import * as React from 'react';
 import styled from 'styled-components/macro';
+import './style.scss'
 
 export function Logo() {
   return (
-    <Wrapper>
-      <Title>Remitano</Title>
-      <Description>Youtube Sharing Website</Description>
-    </Wrapper>
+    <Row style={{height: '100%', paddingLeft: 10}} align={'middle'}>
+      <Col>
+        <Title>Remitano</Title>
+      </Col>
+      <Col xs={0}>
+        <Description>Youtube Sharing Website</Description>
+      </Col>
+    </Row>
   );
 }
 
@@ -19,7 +25,6 @@ const Title = styled.div`
   font-size: 1.25rem;
   color: ${p => p.theme.text};
   font-weight: bold;
-  margin-right: 1rem;
 `;
 
 const Description = styled.div`
