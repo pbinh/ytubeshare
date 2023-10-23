@@ -4,6 +4,7 @@ import { useInjectReducer } from 'redux-injectors';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { ServiceProvider } from '../services/DataService'
 import { VideoManager, YoutubeVideo } from 'types/YoutubeVideo';
+import { GeneralUtils } from 'utils/general-utils';
 
 const initialState: VideoManager = {
   videos: [],
@@ -40,7 +41,7 @@ export function* fetchVideosSaga() {
 }
 
 const callApiToAddVideo = (url:string) => {
-  const youtubeId = url.substring(url.indexOf("?v=") + 3, url.length)
+  const youtubeId = GeneralUtils.extractYouTubeVideoId(url)
 
   return ServiceProvider
           .VideoService

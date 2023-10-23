@@ -11,6 +11,7 @@ import { VideoManager } from 'types/YoutubeVideo';
 import VideoPlayer from '../../components/CustomYoutubePlayer';
 import { createConsumer, Channel } from "@rails/actioncable";
 import { useNavigate } from 'react-router-dom';
+import { GeneralUtils } from 'utils/general-utils';
 const { Header, Content, Footer, Sider } = Layout;
 export function HomePage() {
   const dispatch = useDispatch();
@@ -103,14 +104,14 @@ export function HomePage() {
     setLoginButtonText("Login")
   }
 
-  const requestLogin = () => {
+  const requestLogin = (values) => {
     console.log("Start request login")
     setLoginButtonText("Attempt to login...")
     setLoading(true);
 
     dispatch(onRequestLogin({
-      username: username,
-      password: password
+      username: values.email,
+      password: values.password
     }))
   }
 
@@ -150,9 +151,16 @@ export function HomePage() {
   }
 
   const onRequestSharing = () => {
-    //TODO:
-    // 1. Validate youtube URL
-    dispatch(onAddVideo(youtubeUrl))
+    //Validate YoutubeUrl:
+    const id = GeneralUtils.extractYouTubeVideoId(youtubeUrl)
+
+    if (id)
+      dispatch(onAddVideo(youtubeUrl))
+    else
+      api.error({
+        message: 'Oops Failed to get Youtube ID. Please check Youtube URL',
+        placement: 'bottom',
+      })
   }
 
   const navigate = useNavigate()
@@ -208,7 +216,7 @@ export function HomePage() {
                           <Row gutter={10} align={'middle'}>
                             <Col xxl={8} xl={8} lg={8} md={8} xs={24} sm={24}>
                               <VideoPlayer
-                                videoId={video.url?.substring(video.url.indexOf('?v=') + 3, video.url.length)}
+                                videoId={GeneralUtils.extractYouTubeVideoId(video.url ?? '')}
                               />
                             </Col>
                             <Col xxl={16} xl={16} lg={12} md={12} xs={24} sm={24}>
