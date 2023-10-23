@@ -64,69 +64,84 @@ Before you begin, ensure you have met the following requirements:
             ```
                 bundle install  
             ```
-        - Set up MySql database configuration in the database.yml file.
-        - 
+        - Set up MySql database configuration in the database.yml file. If you find hard to install MySql please use my bash script to pull a MySql image:
+        ``` 
+            # This line will pull a MySql image and build to container then create database 
+            # The database username/password is setup in this file and it's the same to dev env and prod env
+            # SQL_CONTAINER_NAME="ytubeshare"
+            # SQL_PORT="3306"
+            # SQL_ROOT_PASSWORD="YtubeSh@re"
+            ./setup_db_local.sh create_new
+        ```
+        - Redis is more way ezier to install so please install it first then set up the Redis connection at cable.yml
+        - If everything is ok please use:
+        ```
+            #For generate database schemas
+            rails db:create
+        ```
     - Frontend Setup:
-        - Navigate to the ytubeshare-fe directory for the ReactJS frontend.
+        - Navigate to the ytubeshare-fe directory for the ReactJS frontend. ReactJs is quite ez to start just run these lines.
             ```
                 yarn install
-                yarn start
             ```
 
-============RAW README WILL CONTINUE UPDATE:
-IV. Database Setup
-Create the database and run migrations:
+## IV. Database Setup:
+    - Please kindly do some more steps (Sr so much, Due to the lack of time I couldn't resolve these inconvient issues):
+        1. Database:
+            - Install a Database management tool like phpadmin or Dbeaver (Recommended)
+            - Connect to our local MySql by these config:
+                # SQL_CONTAINER_NAME="ytubeshare"
+                # SQL_PORT="3306"
+                # SQL_ROOT_PASSWORD="YtubeSh@re"
+                # HOST="localhost"
+            - Now go to ytubeshare database, then go to videos table => Change all VARCHAR Fields into TEXT. They are: title, description, url, metadata
+            - Please save them all to persist to database
+        2. Front-end:
+            - Please find all: "35.240.222.156" and replace to "localhost" (The IP 35.240.222.156 is the back-end I deployed, now we are using the localhost so need to change before running)
+## V. Running the Application
+    1. Running:
+        - Start the Rails API server:
+            ```
+                rails server
+            ```
+        - Start ReactJs:
+            ```
+                yarn start
+            ```
+    2. To run the test suite, use:
+        - Backend tests: 
+            ```
+                rails test
+            ```
+        - Frontend tests: 
+            ```
+                yarn test
+            ```
+## VI. Docker Deployment
+    I has mentioned this section before:
+        - go to folder ytubeshare
+        - Bash: 
+            ```
+                #Go to folder ytubeshare
+                cd ytubeshare
+                sudo docker compose up  
+            ```
+        - Wait docker build everything
+        - After success build please wait again about 15 seconds. Because I still not fix the issue that back-end will up before MySQL, this will make Back-end crash on the first launch. The waiting is for the ready of MySql database
+        - Try to use:
+            ```
+                #This will start back-end again after mysql is ready
+                sudo docker compose up 
+            ```
+        - Everything will be good now but not enough. There are some setup on database for things work fine (On the scaffolding database on rails commands I forgot to make some field to be text which will limit the length of some fields. For examples: youtube URL & title & description. We will need to access to mysql to fix all VARCHAR fields to TEXT)
 
-bash
-Copy code
-bin/rails db:create
-bin/rails db:migrate
-Seed the database with initial data if required:
-
-bash
-Copy code
-bin/rails db:seed
-V. Running the Application
-Start the Rails API server:
-
-bash
-Copy code
-bin/rails server
-Start the ReactJS frontend:
-
-bash
-Copy code
-yarn start
-Open a web browser and navigate to http://localhost:3000 to access the application.
-
-To run the test suite, use:
-
-Backend tests: bin/rspec
-Frontend tests: yarn test
-
-
-VI. Docker Deployment
-Build Docker containers:
-
-bash
-Copy code
-docker-compose build
-Start the application:
-
-bash
-Copy code
-docker-compose up
-Access the application through the appropriate Docker container URL.
-
-VII. Usage
-To use the YouTube Sharing Application:
-
-Register an account or log in.
-Create playlists and add your favorite YouTube videos.
-Share your playlists with friends or explore others' playlists.
-Search for new videos and enjoy sharing your YouTube discoveries.
-For more information, please refer to the official documentation or contact the project maintainers.
-
-Enjoy sharing your favorite YouTube videos with the world using the YouTube Sharing Application! If you encounter any issues or have questions, please refer to the documentation or contact the development team for assistance.
-
-csharp
+## VII. Usage
+    - To use the YouTube Sharing Application:
+        1. Register an account.
+        2. Login 
+        3. Add your favorite YouTube videos.
+        4. If you want to test the notification feature. Please kindly create some others account and login them into seperated web browser profile then try to share the notifications will show them up
+        5. 
+    - Thank you for take a look and consider the whole project 
+    - Notes: 
+        - If you encounter any issues, Please kindly ping me on zalo : 0901993159 (Phan Binh) or drop me some message on email: phb.aslan@gmail.com 
