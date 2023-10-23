@@ -9,8 +9,8 @@ import { LoginedNav } from './LoginedNav';
 import { Col, Row } from 'antd';
 
 export function NavBar({ onLoginRegisterBtnClicked, onShareBtnClicked, onLogoutBtnClicked }) {
-  const isLogined = useSelector<any>(state => state.userData.auth_token)
-  const email = useSelector<any>(state => state.userData.email)
+  const isLogined = useSelector<any>(state => state?.userData?.auth_token)
+  const email = useSelector<any>(state => state?.userData?.email)
 
   return (
     <Wrapper className='menu-container'>

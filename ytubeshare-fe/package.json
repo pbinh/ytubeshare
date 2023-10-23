@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/preset-env": "7.23.2",
     "@rails/actioncable": "7.1.1",
     "@reduxjs/toolkit": "1.8.5",
     "@testing-library/jest-dom": "5.16.5",
@@ -22,6 +23,7 @@
     "@types/webpack-env": "^1.18.0",
     "antd": "5.10.1",
     "axios": "1.5.1",
+    "babel-jest": "29.7.0",
     "chalk": "4.1.2",
     "cross-env": "7.0.3",
     "eslint-config-prettier": "8.5.0",
@@ -63,6 +65,7 @@
     "stylelint-config-recommended": "9.0.0",
     "stylelint-config-styled-components": "0.1.1",
     "stylelint-processor-styled-components": "1.10.0",
+    "ts-jest": "29.1.1",
     "ts-node": "10.9.1",
     "typescript": "4.6.4",
     "web-vitals": "2.1.4",
@@ -112,6 +115,13 @@
     ]
   },
   "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    },
+    "transform": {
+      "^.+\\.(js|jsx)$": "babel-jest",
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*/*.d.ts",

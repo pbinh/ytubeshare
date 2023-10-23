@@ -1,15 +1,18 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
 import { Nav } from '../Nav';
-import { MemoryRouter } from 'react-router-dom';
+import { createRenderer } from 'react-test-renderer/shallow';
+
+const shallowRenderer = createRenderer();
 
 describe('<Nav />', () => {
   it('should match the snapshot', () => {
-    const logo = render(
-      <MemoryRouter>
-        <Nav />
-      </MemoryRouter>,
+    shallowRenderer.render(
+      <Nav 
+        onLoginRegisterBtnClicked={() => {}} 
+        />
     );
-    expect(logo.container.firstChild).toMatchSnapshot();
+    const renderedOutput = shallowRenderer.getRenderOutput();
+    expect(renderedOutput).toMatchSnapshot();
   });
 });

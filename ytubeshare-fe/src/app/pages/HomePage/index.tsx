@@ -26,7 +26,7 @@ export function HomePage() {
   const [openShareModal, setOpenShareModel] = React.useState(false)
   const [youtubeUrl, setYoutubeUrl] = React.useState('')
 
-  const videos: VideoManager = useSelector<any, VideoManager>(state => state.videos)
+  const videos: VideoManager = useSelector<any, VideoManager>(state => state?.videos)
 
   const [api, contextHolder] = notification.useNotification();
   const [liveChannel, setLiveChannel] = React.useState<any>(null)
